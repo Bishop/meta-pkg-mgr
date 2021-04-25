@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 func main() {
@@ -19,17 +20,32 @@ func main() {
 
 	readConfig(fileName, config)
 
-	result := make([]*PkgItem, 0, 100)
+	result := make(chan *PkgItem)
 
-	for _, pkg := range config.PkgConfigs {
-		for _, item := range processPackageManager(pkg) {
-			result = append(result, item)
-		}
-	}
+	go runConcurrently(config.PkgConfigs, result)
 
-	for _, item := range result {
+	for item := range result {
 		fmt.Println(item)
 	}
+}
+
+func runConcurrently(configs []PkgConfig, result chan *PkgItem) {
+	wait := sync.WaitGroup{}
+
+	for _, pkg := range configs {
+		wait.Add(1)
+
+		go func(pkg PkgConfig) {
+			for _, item := range processPackageManager(pkg) {
+				result <- item
+			}
+			wait.Done()
+		}(pkg)
+	}
+
+	wait.Wait()
+
+	close(result)
 }
 
 func processPackageManager(cfg PkgConfig) OutdatedRecords {
