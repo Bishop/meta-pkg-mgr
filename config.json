@@ -18,11 +18,11 @@
       "flow": [
         {
           "cmd": "rbenv versions",
-          "re": "(?m)^.{2}(?P<current>(?P<pkg>[^\\n]*\\d+\\.\\d+)\\S+)"
+          "re": "(?m)^.{2}(?P<current>(?P<pkg>(?P<family>[^\\n]*)(?P<major>\\d+\\.\\d+))\\S+)"
         },
         {
           "cmd": "rbenv install --list",
-          "re": "(?m)^(?P<available>(?P<pkg>[^\\n0-9]*\\d+\\.\\d+)\\S*)"
+          "re": "(?m)^(?P<available>(?P<pkg>(?P<family>[^\\n0-9]*)(?P<major>\\d+\\.\\d+))\\S*)"
         }
       ]
     },
@@ -41,11 +41,11 @@
       "flow": [
         {
           "cmd": "nvm ls --no-alias --no-colors",
-          "re": "(?m)^[^v]*(?P<current>(?P<pkg>v\\d+)\\.\\d+\\.\\d+)"
+          "re": "(?m)^(?:->)?\\s+(?P<current>(?P<pkg>(?P<family>\\D+)(?P<major>\\d+))\\.\\d+\\.\\d+)"
         },
         {
           "cmd": "nvm ls-remote --no-colors",
-          "re": "(?m)^[^v]*(?P<available>(?P<pkg>v\\d+)\\.\\d+\\.\\d+)"
+          "re": "(?m)^(?:->)?\\s+(?P<available>(?P<pkg>(?P<family>\\D+)(?P<major>\\d+))\\.\\d+\\.\\d+)"
         }
       ]
     }
