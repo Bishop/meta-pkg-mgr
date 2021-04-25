@@ -36,7 +36,7 @@ func processPackageManager(cfg PkgConfig) OutdatedRecords {
 	result := make(OutdatedRecords)
 
 	for _, step := range cfg.Flow {
-		output := captureOutput(step.Command)
+		output := captureOutput(step.Command, cfg.Shell)
 
 		for _, item := range extractVersionInfo(output, step.RegExp) {
 			result.Update(cfg.Name, item)
@@ -48,8 +48,15 @@ func processPackageManager(cfg PkgConfig) OutdatedRecords {
 	return result
 }
 
-func captureOutput(command string) string {
-	args := strings.Split(command, " ")
+func captureOutput(command string, shell string) string {
+	var args []string
+
+	if shell == "" {
+		args = strings.Split(command, " ")
+	} else {
+		args = strings.Split(shell, " ")
+		args = append(args, command)
+	}
 
 	cmd := exec.Command(args[0], args[1:]...)
 

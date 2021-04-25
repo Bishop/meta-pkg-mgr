@@ -25,6 +25,29 @@
           "re": "(?m)^(?P<available>(?P<pkg>[^\\n0-9]*\\d+\\.\\d+)\\S*)"
         }
       ]
+    },
+    {
+      "name": "rust",
+      "flow": [
+        {
+          "cmd": "rustup check",
+          "re": ""
+        }
+      ]
+    },
+    {
+      "name": "nvm",
+      "shell": "sh -lc",
+      "flow": [
+        {
+          "cmd": "nvm ls --no-alias --no-colors",
+          "re": "(?m)^[^v]*(?P<current>(?P<pkg>v\\d+)\\.\\d+\\.\\d+)"
+        },
+        {
+          "cmd": "nvm ls-remote --no-colors",
+          "re": "(?m)^[^v]*(?P<available>(?P<pkg>v\\d+)\\.\\d+\\.\\d+)"
+        }
+      ]
     }
   ]
 }

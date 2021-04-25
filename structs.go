@@ -10,8 +10,9 @@ type Config struct {
 }
 
 type PkgConfig struct {
-	Name string       `json:"name"`
-	Flow []PkgCommand `json:"flow"`
+	Name  string       `json:"name"`
+	Shell string       `json:"shell"`
+	Flow  []PkgCommand `json:"flow"`
 }
 
 type PkgCommand struct {
