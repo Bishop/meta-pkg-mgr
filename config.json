@@ -1,0 +1,30 @@
+{
+  "pkg": [
+    {
+      "name": "brew",
+      "flow": [
+        {
+          "cmd": "brew update",
+          "re": ""
+        },
+        {
+          "cmd": "brew outdated -v",
+          "re": "(?m)^(?P<pkg>.*) \\((?P<current>.*)\\) < (?P<available>.*)$"
+        }
+      ]
+    },
+    {
+      "name": "rbenv",
+      "flow": [
+        {
+          "cmd": "rbenv versions",
+          "re": "(?m)^.{2}(?P<current>(?P<pkg>[^\\n]*\\d+\\.\\d+)\\S+)"
+        },
+        {
+          "cmd": "rbenv install --list",
+          "re": "(?m)^(?P<available>(?P<pkg>[^\\n0-9]*\\d+\\.\\d+)\\S*)"
+        }
+      ]
+    }
+  ]
+}
