@@ -46,7 +46,7 @@ func (p *PkgItem) Installed() bool {
 }
 
 func (p *PkgItem) UpToDate() bool {
-	return p.Current == p.Available
+	return p.Current == p.Available || p.Available == ""
 }
 
 func (p *PkgItem) String() string {
