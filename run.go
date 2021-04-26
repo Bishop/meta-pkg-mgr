@@ -1,24 +1,22 @@
 package main
 
 import (
+	_ "embed"
 	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"sync"
 )
 
+//go:embed "config.json"
+var configFileContent []byte
+
 func main() {
 	config := new(Config)
 
-	fileName, err := filepath.Abs("config.json")
-
-	fatalOnError(err)
-
-	readConfig(fileName, config)
+	readConfig(config)
 
 	result := make(chan *PkgItem)
 
@@ -105,12 +103,8 @@ func extractVersionInfo(text string, re string) []Hash {
 	}
 }
 
-func readConfig(filename string, data interface{}) {
-	content, err := os.ReadFile(filename)
-
-	fatalOnError(err)
-
-	err = json.Unmarshal(content, data)
+func readConfig(data interface{}) {
+	err := json.Unmarshal(configFileContent, data)
 
 	fatalOnError(err)
 
