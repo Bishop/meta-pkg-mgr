@@ -48,6 +48,15 @@
           "re": "(?m)^(?:->)?\\s+(?P<available>(?P<pkg>(?P<family>\\D+)(?P<major>\\d+))\\.\\d+\\.\\d+)"
         }
       ]
+    },
+    {
+      "name": "pip3",
+      "flow": [
+        {
+          "cmd": "pip3 list --outdated",
+          "re": "(?m)^(?P<pkg>\\S*?)\\s+(?P<current>\\S*?\\d\\S*?)\\s+(?P<available>\\S*?\\d\\S*?)\\s"
+        }
+      ]
     }
   ]
 }
