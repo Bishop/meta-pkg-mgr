@@ -27,11 +27,11 @@
       ]
     },
     {
-      "name": "rust",
+      "name": "rustup",
       "flow": [
         {
           "cmd": "rustup check",
-          "re": "(?m)^(?P<pkg>.*) - .*: (?P<current>\\S+) .*(?:-> (?P<available>\\S+) )?"
+          "re": "(?m)^(?P<pkg>.*) - [^:]*: (?P<current>\\S+)(?:[^>]* -> (?P<available>\\S+) .*)?$"
         }
       ]
     },
