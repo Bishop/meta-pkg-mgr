@@ -1,0 +1,42 @@
+package main
+
+import (
+	_ "embed"
+	"encoding/json"
+	"io/ioutil"
+	"os"
+	"os/user"
+	"path"
+)
+
+const configFsPath = ".upt/config.json"
+
+//go:embed "config.json"
+var configFileContent []byte
+
+func readConfig(data interface{}) {
+	var err error
+
+	if configFileExist() {
+		configFileContent, err = ioutil.ReadFile(configFileName())
+		fatalOnError(err)
+	}
+
+	err = json.Unmarshal(configFileContent, data)
+
+	fatalOnError(err)
+
+	return
+}
+
+func configFileExist() bool {
+	_, err := os.Stat(configFileName())
+
+	return !os.IsNotExist(err)
+}
+
+func configFileName() string {
+	u, _ := user.Current()
+
+	return path.Join(u.HomeDir, configFsPath)
+}

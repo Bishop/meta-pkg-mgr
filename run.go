@@ -1,17 +1,12 @@
 package main
 
 import (
-	_ "embed"
-	"encoding/json"
 	"fmt"
 	"os/exec"
 	"regexp"
 	"strings"
 	"sync"
 )
-
-//go:embed "config.json"
-var configFileContent []byte
 
 func main() {
 	config := new(Config)
@@ -101,14 +96,6 @@ func extractVersionInfo(text string, re string) []Hash {
 
 		return items
 	}
-}
-
-func readConfig(data interface{}) {
-	err := json.Unmarshal(configFileContent, data)
-
-	fatalOnError(err)
-
-	return
 }
 
 func fatalOnError(err error) {
