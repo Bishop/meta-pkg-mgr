@@ -40,3 +40,15 @@ func configFileName() string {
 
 	return path.Join(u.HomeDir, configFsPath)
 }
+
+func saveDefaultConfig() {
+	var err error
+
+	if !configFileExist() {
+		err = os.MkdirAll(path.Dir(configFileName()), 0740)
+		fatalOnError(err)
+	}
+
+	err = ioutil.WriteFile(configFileName(), configFileContent, 0640)
+	fatalOnError(err)
+}
