@@ -7,6 +7,9 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+
+	"github.com/vbauerster/mpb"
+	"github.com/vbauerster/mpb/decor"
 )
 
 func main() {
@@ -19,35 +22,38 @@ func main() {
 
 	readConfig(config)
 
-	result := make(chan *PkgItem)
-
-	go runConcurrently(config.PkgConfigs, result)
-
-	for item := range result {
-		fmt.Println(item)
+	for pkgItems := range runConcurrently(config.PkgConfigs) {
+		for _, item := range *pkgItems {
+			fmt.Println(item)
+		}
 	}
 }
 
-func runConcurrently(configs []PkgConfig, result chan *PkgItem) {
+func runConcurrently(configs []PkgConfig) chan *OutdatedRecords {
+	result := make(chan *OutdatedRecords, len(configs))
+
 	wait := sync.WaitGroup{}
+	progress := mpb.New(mpb.WithWaitGroup(&wait))
 
 	for _, pkg := range configs {
 		wait.Add(1)
+		bar := createBar(progress, pkg.Name)
 
 		go func(pkg PkgConfig) {
-			for _, item := range processPackageManager(pkg) {
-				result <- item
-			}
+			result <- processPackageManager(pkg)
+			bar.IncrBy(1)
 			wait.Done()
 		}(pkg)
 	}
 
-	wait.Wait()
+	progress.Wait()
 
 	close(result)
+
+	return result
 }
 
-func processPackageManager(cfg PkgConfig) OutdatedRecords {
+func processPackageManager(cfg PkgConfig) *OutdatedRecords {
 	result := make(OutdatedRecords)
 
 	for _, step := range cfg.Flow {
@@ -60,7 +66,7 @@ func processPackageManager(cfg PkgConfig) OutdatedRecords {
 
 	result.Filter()
 
-	return result
+	return &result
 }
 
 func captureOutput(command string, shell string) string {
@@ -108,4 +114,17 @@ func fatalOnError(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func createBar(progress *mpb.Progress, name string) *mpb.Bar {
+	return progress.AddSpinner(1, mpb.SpinnerOnLeft,
+		mpb.PrependDecorators(
+			decor.Name(name, decor.WCSyncSpaceR),
+		),
+		mpb.AppendDecorators(
+			decor.Elapsed(decor.ET_STYLE_GO, decor.WCSyncWidth),
+		),
+		mpb.BarClearOnComplete(),
+		mpb.BarWidth(4),
+	)
 }
