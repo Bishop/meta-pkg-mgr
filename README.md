@@ -6,6 +6,7 @@ The tool helps you check for updates across multiple package managers. The follo
 * rbenv
 * rustup
 * nvm
+* pip3
 
 Build command: `go build -o $HOME/go/bin/upt`
 
