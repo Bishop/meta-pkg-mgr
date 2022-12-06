@@ -13,6 +13,21 @@ const configFsPath = ".upt/config.json"
 //go:embed "config.json"
 var configFileContent []byte
 
+type Config struct {
+	PkgConfigs []PkgConfig `json:"pkg"`
+}
+
+type PkgConfig struct {
+	Name  string       `json:"name"`
+	Shell string       `json:"shell"`
+	Flow  []PkgCommand `json:"flow"`
+}
+
+type PkgCommand struct {
+	Command string `json:"cmd"`
+	RegExp  string `json:"re"`
+}
+
 func readConfig(data interface{}) {
 	var err error
 

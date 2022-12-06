@@ -8,21 +8,6 @@ import (
 type Hash map[string]string
 type OutdatedRecords map[string]*PkgItem
 
-type Config struct {
-	PkgConfigs []PkgConfig `json:"pkg"`
-}
-
-type PkgConfig struct {
-	Name  string       `json:"name"`
-	Shell string       `json:"shell"`
-	Flow  []PkgCommand `json:"flow"`
-}
-
-type PkgCommand struct {
-	Command string `json:"cmd"`
-	RegExp  string `json:"re"`
-}
-
 type PkgItem struct {
 	Manager   string
 	Package   string
