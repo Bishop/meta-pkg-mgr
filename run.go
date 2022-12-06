@@ -1,8 +1,8 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -13,14 +13,25 @@ import (
 )
 
 func main() {
-	if len(os.Args) > 1 && os.Args[1] == "--save-config" {
+	saveConfig := flag.Bool("save-config", false, fmt.Sprintf("Save default config to %s", configFileName()))
+	showHelp := flag.Bool("h", false, "Show help")
+
+	flag.Parse()
+
+	if *saveConfig {
 		saveDefaultConfig()
+		fmt.Printf("Config saved to %s\n", configFileName())
+		return
+	} else if *showHelp {
+		flag.PrintDefaults()
 		return
 	}
 
 	config := new(Config)
 
 	readConfig(config)
+
+	fmt.Printf("Use config: %s\n", actualConfigFile())
 
 	for pkgItems := range runConcurrently(config.PkgConfigs) {
 		for _, item := range *pkgItems {

@@ -28,6 +28,14 @@ func readConfig(data interface{}) {
 	return
 }
 
+func actualConfigFile() string {
+	if configFileExist() {
+		return configFileName()
+	} else {
+		return "default"
+	}
+}
+
 func configFileExist() bool {
 	_, err := os.Stat(configFileName())
 
