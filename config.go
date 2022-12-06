@@ -3,7 +3,6 @@ package main
 import (
 	_ "embed"
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"os/user"
 	"path"
@@ -18,7 +17,7 @@ func readConfig(data interface{}) {
 	var err error
 
 	if configFileExist() {
-		configFileContent, err = ioutil.ReadFile(configFileName())
+		configFileContent, err = os.ReadFile(configFileName())
 		fatalOnError(err)
 	}
 
@@ -49,6 +48,6 @@ func saveDefaultConfig() {
 		fatalOnError(err)
 	}
 
-	err = ioutil.WriteFile(configFileName(), configFileContent, 0640)
+	err = os.WriteFile(configFileName(), configFileContent, 0640)
 	fatalOnError(err)
 }
