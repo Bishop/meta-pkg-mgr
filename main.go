@@ -23,8 +23,6 @@ func main() {
 	} else if *showHelp {
 		flag.PrintDefaults()
 		return
-	} else if *upgrade {
-
 	}
 
 	config := new(Config)
@@ -33,7 +31,11 @@ func main() {
 
 	fmt.Printf("Use config: %s\n", actualConfigFile())
 
-	runConcurrently(config.PkgConfigs)
+	if *upgrade {
+
+	} else {
+		runConcurrently(config.PkgConfigs)
+	}
 }
 
 func runConcurrently(configs []PkgConfig) {
