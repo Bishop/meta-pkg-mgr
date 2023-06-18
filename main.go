@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/vbauerster/mpb"
-	"github.com/vbauerster/mpb/decor"
+	"github.com/vbauerster/mpb/v8"
+	"github.com/vbauerster/mpb/v8/decor"
 )
 
 func main() {
@@ -128,14 +128,13 @@ func fatalOnError(err error) {
 }
 
 func createBar(progress *mpb.Progress, name string) *mpb.Bar {
-	return progress.AddSpinner(1, mpb.SpinnerOnLeft,
-		mpb.PrependDecorators(
-			decor.Name(name, decor.WCSyncSpaceR),
-		),
+	return progress.New(1,
+		mpb.SpinnerStyle().PositionLeft(),
 		mpb.AppendDecorators(
+			decor.Name(name, decor.WCSyncSpaceR),
 			decor.Elapsed(decor.ET_STYLE_GO, decor.WCSyncWidth),
 		),
-		mpb.BarClearOnComplete(),
-		mpb.BarWidth(4),
+		mpb.BarWidth(1),
+		mpb.BarFillerOnComplete("+"),
 	)
 }
