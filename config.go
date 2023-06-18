@@ -39,8 +39,6 @@ func readConfig(data interface{}) {
 	err = json.Unmarshal(configFileContent, data)
 
 	fatalOnError(err)
-
-	return
 }
 
 func actualConfigFile() string {

@@ -15,6 +15,7 @@ import (
 func main() {
 	saveConfig := flag.Bool("save-config", false, fmt.Sprintf("Save default config to %s", configFileName()))
 	showHelp := flag.Bool("h", false, "Show help")
+	upgrade := flag.Bool("u", false, "Install updates")
 
 	flag.Parse()
 
@@ -25,6 +26,8 @@ func main() {
 	} else if *showHelp {
 		flag.PrintDefaults()
 		return
+	} else if *upgrade {
+
 	}
 
 	config := new(Config)

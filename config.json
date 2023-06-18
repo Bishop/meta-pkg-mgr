@@ -11,7 +11,8 @@
           "cmd": "brew outdated -v",
           "re": "(?m)^(?P<pkg>.*) \\((?P<current>.*)\\) < (?P<available>.*)$"
         }
-      ]
+      ],
+      "upgrade": "brew upgrade"
     },
     {
       "name": "rbenv",
