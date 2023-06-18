@@ -70,7 +70,7 @@ func (o OutdatedRecords) Update(mgr string, item Hash) {
 	o[item["pkg"]].Update(item)
 }
 
-func (o OutdatedRecords) Filter() {
+func (o OutdatedRecords) Filter() OutdatedRecords {
 	installed := make(Hash)
 
 	for _, item := range o {
@@ -86,4 +86,16 @@ func (o OutdatedRecords) Filter() {
 			delete(o, name)
 		}
 	}
+
+	return o
+}
+
+func (o OutdatedRecords) List() []string {
+	var list []string
+
+	for _, item := range o {
+		list = append(list, item.String())
+	}
+
+	return list
 }
